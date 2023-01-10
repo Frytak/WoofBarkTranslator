@@ -1,0 +1,4 @@
+t=>woof bark bark bark woof bark woof woof 
+e=>woof bark bark woof woof bark woof bark 
+s=>woof bark bark bark woof woof bark bark 
+t=>woof bark bark bark woof bark woof woof 
