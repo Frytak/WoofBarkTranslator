@@ -1,5 +1,7 @@
 use std::fs::File;
 use std::io::{stdin, Write, Read};
+use std::env::current_dir;
+use relative_path::RelativePath;
 
 // Encode to furry bytes
 fn encode(message: &String) -> Vec<String> {
@@ -25,7 +27,10 @@ fn encode(message: &String) -> Vec<String> {
 // Decode from furry bytes
 fn decode(message: Option<&String>) -> String {
     let mut input = String::new();
-    let mut file = File::open(DECODE_FILE_PATH).unwrap();
+    let root = current_dir().unwrap();
+    let relative_path = RelativePath::new("./bark.txt");
+    let full_path = relative_path.to_logical_path(&root);
+    let mut file = File::open(full_path).unwrap();
 
     match message {
         Some(m) => input = m.clone(),
@@ -48,23 +53,24 @@ fn decode(message: Option<&String>) -> String {
         for j in 0..8 {
             byte.push_str(binary[i * 8 + j]);
         }
-        unsafe{
+
+        unsafe {
             message.push_str(&String::from_utf8_unchecked(vec![u8::from_str_radix(&byte, 2).unwrap()]));
         }
     }
 
     message
 }
-
-const ENCODE_FILE_PATH: &str = "C:\\Users\\fryta\\Pulpit\\~\\Important\\Programming Projects\\WoofBarkTranslator\\src\\woof.txt";
-const DECODE_FILE_PATH: &str = "C:\\Users\\fryta\\Pulpit\\~\\Important\\Programming Projects\\WoofBarkTranslator\\src\\bark.txt";
+const ENCODE_FILE_PATH: &str = "C:\\Users\\Frytak\\Desktop\\~\\Important\\Programming Projects\\WoofBarkTranslator\\src\\woof.txt";
+const DECODE_FILE_PATH: &str = "C:\\Users\\Frytak\\Desktop\\~\\Important\\Programming Projects\\WoofBarkTranslator\\src\\bark.txt";
 const PREVIEW_FILE_MAX_LEN: usize = 5;
+const ENCODE_WITH_TRANSLATION: bool = false;
 
 fn main() {
     let mut input = String::new();
 
     // Clear the console
-    //print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
+    // print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
 
     loop {
         println!("Choose an action:");
@@ -87,7 +93,10 @@ fn main() {
 
 fn encode_loop() {
     let mut input = String::new();
-    let mut file = File::create(ENCODE_FILE_PATH).unwrap();
+    let root = current_dir().unwrap();
+    let relative_path = RelativePath::new("./woof.txt");
+    let full_path = relative_path.to_logical_path(&root);
+    let mut file = File::create(full_path).unwrap();
 
     // Get the message to encode
     println!("Enter a message to encode:");

@@ -3,5 +3,14 @@
 version = 3
 
 [[package]]
+name = "relative-path"
+version = "1.7.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d3bf6b372449361333ac1f498b7edae4dd5e70dccd7c0c2a7c7bce8f05ede648"
+
+[[package]]
 name = "woof_bark_translator"
 version = "0.1.0"
+dependencies = [
+ "relative-path",
+]
