@@ -48,22 +48,23 @@ fn decode(message: Option<&String>) -> String {
         for j in 0..8 {
             byte.push_str(binary[i * 8 + j]);
         }
-        message.push_str(&String::from_utf8(vec![u8::from_str_radix(&byte, 2).unwrap()]).unwrap());
+        unsafe{
+            message.push_str(&String::from_utf8_unchecked(vec![u8::from_str_radix(&byte, 2).unwrap()]));
+        }
     }
 
     message
 }
 
-const ENCODE_FILE_PATH: &str = "C:\\Users\\Frytak\\Desktop\\~\\Important\\Programming Projects\\WoofBarkTranslator\\src\\woof.txt";
-const DECODE_FILE_PATH: &str = "C:\\Users\\Frytak\\Desktop\\~\\Important\\Programming Projects\\WoofBarkTranslator\\src\\bark.txt";
+const ENCODE_FILE_PATH: &str = "C:\\Users\\fryta\\Pulpit\\~\\Important\\Programming Projects\\WoofBarkTranslator\\src\\woof.txt";
+const DECODE_FILE_PATH: &str = "C:\\Users\\fryta\\Pulpit\\~\\Important\\Programming Projects\\WoofBarkTranslator\\src\\bark.txt";
 const PREVIEW_FILE_MAX_LEN: usize = 5;
-const ENCODE_WITH_TRANSLATION: bool = true;
 
 fn main() {
     let mut input = String::new();
 
     // Clear the console
-    print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
+    //print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
 
     loop {
         println!("Choose an action:");
@@ -99,10 +100,8 @@ fn encode_loop() {
 
     // Display and write to "woof.txt"
     println!("Encoded message:");
-    for (i, char) in input.chars().enumerate() {
-        let translation;
-        if ENCODE_WITH_TRANSLATION { translation = char.to_string() + "=>" + &chars[i as usize]; }
-        else { translation = chars[i as usize].clone(); }
+    for i in 0..chars.len() {
+        let translation = chars[i as usize].clone();
 
         file.write_all((translation.clone() + "\n").as_bytes()).unwrap();
         
@@ -110,7 +109,7 @@ fn encode_loop() {
         else if i == PREVIEW_FILE_MAX_LEN { println!("..."); }
     }
 
-    print!("\n\n\n");
+    print!("\n\n");
 }
 
 
@@ -129,5 +128,5 @@ fn decode_loop() {
     println!("Decoded message:");
     println!("'{}'", decoded);
 
-    print!("\n\n\n");
+    print!("\n\n");
 }
